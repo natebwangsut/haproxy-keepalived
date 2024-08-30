@@ -1,0 +1,61 @@
+networks:
+  haproxy-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
+services:
+  server1:
+    image: nginx
+    networks:
+      haproxy-net:
+        ipv4_address: 172.18.0.3
+
+  server2:
+    image: nginx
+    networks:
+      haproxy-net:
+        ipv4_address: 172.18.0.4
+
+  haproxy1:
+    build:
+      context: .
+      dockerfile: Dockerfile.haproxy
+    networks:
+      haproxy-net:
+        ipv4_address: 172.18.0.5
+
+  keepalived1:
+    build:
+      context: .
+      dockerfile: Dockerfile.keepalived
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_BROADCAST
+      - NET_RAW
+    # networks:
+    #   haproxy-net:
+    #     ipv4_address: 172.18.0.7
+
+  haproxy2:
+    build:
+      context: .
+      dockerfile: Dockerfile.haproxy
+    networks:
+      haproxy-net:
+        ipv4_address: 172.18.0.6
+
+  keepalived2:
+    build:
+      context: .
+      dockerfile: Dockerfile.keepalived
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_BROADCAST
+      - NET_RAW
+    # networks:
+    #   haproxy-net:
+    #     ipv4_address: 172.18.0.8

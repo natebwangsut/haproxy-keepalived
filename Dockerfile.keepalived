@@ -1,0 +1,2 @@
+FROM osixia/keepalived:latest
+COPY keepalived.conf /etc/keepalived/keepalived.conf
